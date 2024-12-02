@@ -1,15 +1,19 @@
 package org.toby.tobyspring;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
 public class ObjectFactory {
 
-    public PaymentService paymentService(String type) {
-        return new PaymentService(exRateProvider(type));
+    @Bean
+    public PaymentService paymentService() {
+        return new PaymentService(exRateProvider());
     }
 
-    public ExRateProvider exRateProvider(String type) {
-        if(type.equals("simple")) return new SimpleExRatePaymentService();
-        else if(type.equals("api")) return new WebApiExRateProvider();
-        else throw new IllegalArgumentException("지원되지 않는 타입입니다.");
+    @Bean
+    public ExRateProvider exRateProvider() {
+        return new SimpleExRatePaymentService();
 
     }
 

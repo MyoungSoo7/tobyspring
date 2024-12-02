@@ -15,10 +15,15 @@ import java.util.stream.Collectors;
 
 public class PaymentService {
 
-    // SOC
     public Payment prepare(Long orderId, String currency, BigDecimal foreignCurrencyAmount) throws IOException {
-        // 환율 가져오기
-        URL url = new URL("https://open.er-api.com/v6/latest/"+currency);
+        BigDecimal exRate = getExRate(currency);
+        BigDecimal convertedAmount = foreignCurrencyAmount.multiply(exRate);
+        LocalDateTime validUntil = LocalDateTime.now().plusHours(1);
+        return new Payment(orderId, currency, foreignCurrencyAmount, exRate, convertedAmount , validUntil);
+    }
+
+    private BigDecimal getExRate(String currency) throws IOException {
+        URL url = new URL("https://open.er-api.com/v6/latest/"+ currency);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String response = br.lines().collect(Collectors.joining());
@@ -27,10 +32,7 @@ public class PaymentService {
         ObjectMapper mapper = new ObjectMapper();
         ExRateData exRateData = mapper.readValue(response, ExRateData.class);
         BigDecimal exRate = exRateData.rates().get("KRW");
-
-        BigDecimal convertedAmount = foreignCurrencyAmount.multiply(exRate);
-        LocalDateTime validUntil = LocalDateTime.now().plusHours(1);
-        return new Payment(orderId, currency, foreignCurrencyAmount, exRate, convertedAmount , validUntil);
+        return exRate;
     }
 
     public static void main(String[] args) throws IOException {

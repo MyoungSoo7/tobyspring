@@ -19,4 +19,13 @@ class SortTest {
         Assertions.assertThat(list).isEqualTo(List.of("b", "aa"));
     }
 
+    @Test
+    void sort3times() {
+        Sort sort = new Sort();
+
+        List<String> list = sort.sortByLength(Arrays.asList("aa","ccc", "b"));
+
+        Assertions.assertThat(list).isEqualTo(List.of("b", "aa", "ccc"));
+    }
+
 }

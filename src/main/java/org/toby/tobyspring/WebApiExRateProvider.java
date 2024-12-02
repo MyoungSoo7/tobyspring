@@ -12,7 +12,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.stream.Collectors;
 
-@Component
+
 public class WebApiExRateProvider implements ExRateProvider {
 
     @Override
@@ -25,6 +25,9 @@ public class WebApiExRateProvider implements ExRateProvider {
 
         ObjectMapper mapper = new ObjectMapper();
         ExRateData exRateData = mapper.readValue(response, ExRateData.class);
+
+        System.out.println("Exchange Rate: " + exRateData.rates().get("KRW"));
+
         return exRateData.rates().get("KRW");
     }
 }

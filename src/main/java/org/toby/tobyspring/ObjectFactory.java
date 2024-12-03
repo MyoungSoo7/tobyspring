@@ -10,6 +10,7 @@ import org.toby.tobyspring.exrate.WebApiExRateProvider;
 @Configuration
 public class ObjectFactory {
 
+
     @Bean
     public PaymentService paymentService() {
         return new PaymentService(CachedExRateProvider());

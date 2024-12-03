@@ -12,6 +12,7 @@ class SortTest {
     void beforeEach() {
         //  given 준비
          sort = new Sort();
+        System.out.println(this);
     }
 
     @Test
